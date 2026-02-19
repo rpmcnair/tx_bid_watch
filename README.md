@@ -13,15 +13,7 @@ This project builds a lightweight data engineering pipeline that:
 - Sends notifications when relevant items appear
 
 ## Overview
-EventBridge (schedule)
-    ↓
-Lambda ingestion job
-    ↓
-S3 (raw storage)
-    ↓
-Keyword filtering logic
-    ↓
-SNS email alert
+EventBridge (schedule) -> Lambda ingestion job -> S3 (raw storage) -> Keyword filtering logic -> SNS email alert
 
 ## Tech Stack
 - Python 3.12
@@ -39,5 +31,13 @@ SNS email alert
 2. Install dependencies:
    pip install -r requirements.txt
 3. Run ingestion locally:
-   python scripts/local_run.py
+   python -m scripts.local_run
 
+## Quickstart (Local)
+1. Create a virtual environment and install deps:
+```bash
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install -r requirements.txt
+    cp .env.example .env
+    python -m scripts.local_run 
