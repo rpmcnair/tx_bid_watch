@@ -1,6 +1,6 @@
 # tx_bid_watch
 
-A serverless AWS data pipeline that ingests procurement bid data from the Texas Open Data Portal, stores raw snapshots in S3, and sends keyword-based alerts when new matching bids are detected. (Work in progress)
+A serverless AWS data pipeline that takes bid item dataset from the Texas Open Data Portal, stores raw snapshots in S3, and sends keyword-based alerts when new matching bids are detected. (In Progress)
 
 
 ## Problem

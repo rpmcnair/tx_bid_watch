@@ -14,7 +14,7 @@ class SodaClient:
 
     @property
     def resource_url(self) -> str:
-        # SODA resource endpoint
+
         return f"https://{self.domain}/resource/{self.dataset_id}.json"
 
     def fetch_updated_since(
@@ -27,8 +27,7 @@ class SodaClient:
         Fetch records updated in the last `lookback_hours`, paging with $limit/$offset.
         """
         since = datetime.now(timezone.utc) - timedelta(hours=lookback_hours)
-        # Socrata timestamps are ISO-like. We'll use UTC ISO format.
-        # Example: 2026-02-19T12:34:56Z
+
         since_str = since.replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
         all_rows: list[dict[str, Any]] = []
@@ -51,7 +50,7 @@ class SodaClient:
 
             all_rows.extend(rows)
 
-            # Stop early if fewer than a full page returned
+        
             if len(rows) < page_limit:
                 break
 

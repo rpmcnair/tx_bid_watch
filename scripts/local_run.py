@@ -29,7 +29,7 @@ def fetch_updated_since(
             "$limit": page_limit,
             "$offset": offset,
             "$where": f":updated_at >= '{since_str}'",
-            "$order": ":updated_at ASC",
+            "$order": ":updated_at ASC", 
         }
         resp = requests.get(url, params=params, timeout=30)
         resp.raise_for_status()
