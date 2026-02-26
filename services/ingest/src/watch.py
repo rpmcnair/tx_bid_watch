@@ -1,4 +1,5 @@
 from __future__ import annotations
+import boto3
 
 import json
 from dataclasses import dataclass
@@ -37,13 +38,32 @@ def write_raw_json_local(rows: list[dict[str, Any]], dataset_id: str, run_ts: st
     return out_path
 
 
+def write_raw_json_s3(
+    rows: list[dict[str, Any]],
+    bucket: str,
+    prefix: str,
+    dataset_id: str,
+    run_ts: str,
+) -> str:
+    """
+    Write raw rows to S3 under:
+      s3://<bucket>/<prefix>/dataset=<dataset_id>/run=<run_ts>.json
+    Returns the S3 key.
+    """
+    key = f"{prefix}/dataset={dataset_id}/run={run_ts}.json"
+    body = json.dumps(rows, indent=2).encode("utf-8")
+
+    s3 = boto3.client("s3")
+    s3.put_object(
+        Bucket=bucket,
+        Key=key,
+        Body=body,
+        ContentType="application/json",
+    )
+    return key
+
+
 def run_watch(settings: Settings) -> WatchResult:
-    """
-    Orchestrates a single ingest run:
-    - Fetch updated rows from Socrata
-    - Write them to local storage (raw zone)
-    - Return metadata about the run
-    """
     client = SodaClient(domain=settings.soda_domain, dataset_id=settings.dataset_id)
 
     rows = client.fetch_updated_since(
@@ -53,7 +73,19 @@ def run_watch(settings: Settings) -> WatchResult:
     )
 
     run_ts = _run_timestamp()
-    out_path = write_raw_json_local(rows, settings.dataset_id, run_ts)
+
+    if settings.raw_bucket:
+        key = write_raw_json_s3(
+            rows=rows,
+            bucket=settings.raw_bucket,
+            prefix=settings.raw_prefix,
+            dataset_id=settings.dataset_id,
+            run_ts=run_ts,
+        )
+        output_path = f"s3://{settings.raw_bucket}/{key}"
+    else:
+        out_path = write_raw_json_local(rows, settings.dataset_id, run_ts)
+        output_path = str(out_path)
 
     return WatchResult(
         run_ts=run_ts,
@@ -61,7 +93,7 @@ def run_watch(settings: Settings) -> WatchResult:
         domain=settings.soda_domain,
         lookback_hours=settings.lookback_hours,
         pulled_rows=len(rows),
-        output_path=str(out_path),
+        output_path=output_path,
     )
 
 

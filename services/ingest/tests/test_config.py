@@ -22,6 +22,8 @@ def test_load_settings_reads_env_vars(monkeypatch):
     assert s.lookback_hours == 48
     assert s.page_limit == 500
     assert s.max_pages == 10
+    assert s.raw_bucket is None
+    assert s.raw_prefix == "raw"
 
 
 def test_load_settings_defaults_when_env_missing(monkeypatch):
@@ -39,6 +41,8 @@ def test_load_settings_defaults_when_env_missing(monkeypatch):
     assert s.lookback_hours == 24
     assert s.page_limit == 1000
     assert s.max_pages == 2
+    assert s.raw_bucket is None
+    assert s.raw_prefix == "raw"
 
 
 def test_load_settings_strips_whitespace(monkeypatch):

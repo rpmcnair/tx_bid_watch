@@ -65,6 +65,8 @@ def test_run_watch_orchestrates_fetch_and_write(tmp_path, monkeypatch):
         lookback_hours=24,
         page_limit=1000,
         max_pages=2,
+        raw_bucket=None,
+        raw_prefix="raw",
     )
 
     result = watch.run_watch(settings)

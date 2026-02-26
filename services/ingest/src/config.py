@@ -11,6 +11,8 @@ class Settings:
     lookback_hours: int
     page_limit: int
     max_pages: int
+    raw_bucket: str | None 
+    raw_prefix: str 
 
 
 def load_settings() -> Settings:
@@ -21,11 +23,16 @@ def load_settings() -> Settings:
     soda_domain = os.getenv("SODA_DOMAIN", "data.texas.gov").strip()
     dataset_id = os.getenv("DATASET_ID", "qh8x-rm8r").strip()
 
+    raw_bucket = os.getenv("RAW_BUCKET", "").strip() or None
+    raw_prefix = os.getenv("RAW_PREFIX", "raw").strip().strip("/")
+
     return Settings(
         soda_domain=soda_domain,
         dataset_id=dataset_id,
         lookback_hours=_get_int("LOOKBACK_HOURS", 24),
         page_limit=_get_int("PAGE_LIMIT", 1000),
         max_pages=_get_int("MAX_PAGES", 2),
+        raw_bucket=raw_bucket,
+        raw_prefix=raw_prefix,
     )
 
