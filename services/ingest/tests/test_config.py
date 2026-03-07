@@ -13,6 +13,9 @@ def test_load_settings_reads_env_vars(monkeypatch):
     monkeypatch.setenv("LOOKBACK_HOURS", "48")
     monkeypatch.setenv("PAGE_LIMIT", "500")
     monkeypatch.setenv("MAX_PAGES", "10")
+    monkeypatch.delenv("RAW_BUCKET", raising=False)
+    monkeypatch.delenv("RAW_PREFIX", raising=False)
+    
 
     cfg_mod = reload_config()
     s = cfg_mod.load_settings()
@@ -32,6 +35,8 @@ def test_load_settings_defaults_when_env_missing(monkeypatch):
     monkeypatch.delenv("LOOKBACK_HOURS", raising=False)
     monkeypatch.delenv("PAGE_LIMIT", raising=False)
     monkeypatch.delenv("MAX_PAGES", raising=False)
+    monkeypatch.delenv("RAW_BUCKET", raising=False)
+    monkeypatch.delenv("RAW_PREFIX", raising=False)
 
     cfg_mod = reload_config()
     s = cfg_mod.load_settings()

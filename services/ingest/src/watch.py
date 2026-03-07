@@ -45,11 +45,6 @@ def write_raw_json_s3(
     dataset_id: str,
     run_ts: str,
 ) -> str:
-    """
-    Write raw rows to S3 under:
-      s3://<bucket>/<prefix>/dataset=<dataset_id>/run=<run_ts>.json
-    Returns the S3 key.
-    """
     key = f"{prefix}/dataset={dataset_id}/run={run_ts}.json"
     body = json.dumps(rows, indent=2).encode("utf-8")
 
