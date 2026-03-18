@@ -15,4 +15,5 @@ def lambda_handler(event, context):
     """
     settings = load_settings()
     result = run_watch(settings)
-    return asdict(result)
+    print(asdict(result))
+    return asdict(result) 
