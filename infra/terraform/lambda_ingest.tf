@@ -75,6 +75,7 @@ resource "aws_lambda_function" "ingest" {
       LOOKBACK_HOURS = "24"
       PAGE_LIMIT     = "1000"
       MAX_PAGES      = "2"
+      SNS_TOPIC_ARN = aws_sns_topic.ingest_notifications.arn
     }
   }
 }
