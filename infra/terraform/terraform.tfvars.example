@@ -1,9 +1,19 @@
-aws_region         = "us-east-1"
-bucket_name        = "replace-with-unique-bucket-name"
+aws_region         = "us-east-2"
+bucket_name        = "tx-bid-watch-raw-riley-7f3a"
 enable_versioning  = true
 
-tags = {
-  project = "tx_bid_watch"
-  env     = "dev"
-}
+project_name = "tx-bid-watch"
+env          = "dev"
+
+raw_prefix          = "raw"
+dataset_id          = "qh8x-rm8r"
+soda_domain         = "data.texas.gov"
+lookback_hours      = 24
+page_limit          = 1000
+max_pages           = 2
+
+lambda_function_name = "tx-bid-watch-ingest"
+schedule_expression  = "rate(24 hours)"
+
+notification_email   = ""
 

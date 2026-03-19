@@ -1,7 +1,7 @@
 resource "aws_cloudwatch_event_rule" "ingest_daily" {
   name                = "tx-bid-watch-ingest-daily"
   description         = "Run tx-bid-watch ingest Lambda daily"
-  schedule_expression = "rate(24 hours)"
+  schedule_expression = var.schedule_expression
 }
 
 resource "aws_cloudwatch_event_target" "ingest_daily_target" {

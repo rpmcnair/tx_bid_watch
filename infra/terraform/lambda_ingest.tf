@@ -5,8 +5,8 @@ resource "aws_iam_role" "ingest_lambda_role" {
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
-      Effect = "Allow",
-      Action = "sts:AssumeRole",
+      Effect    = "Allow",
+      Action    = "sts:AssumeRole",
       Principal = { Service = "lambda.amazonaws.com" }
     }]
   })
@@ -63,19 +63,19 @@ resource "aws_lambda_function" "ingest" {
   filename         = "${path.module}/../../services/ingest/dist/ingest_lambda.zip"
   source_code_hash = filebase64sha256("${path.module}/../../services/ingest/dist/ingest_lambda.zip")
 
-  timeout = 60
+  timeout     = 60
   memory_size = 512
 
   environment {
     variables = {
       RAW_BUCKET     = var.bucket_name
-      RAW_PREFIX     = "raw"
-      SODA_DOMAIN    = "data.texas.gov"
-      DATASET_ID     = "qh8x-rm8r"
-      LOOKBACK_HOURS = "24"
-      PAGE_LIMIT     = "1000"
-      MAX_PAGES      = "2"
-      SNS_TOPIC_ARN = aws_sns_topic.ingest_notifications.arn
+      RAW_PREFIX     = var.raw_prefix
+      SODA_DOMAIN    = var.soda_domain
+      DATASET_ID     = var.dataset_id
+      LOOKBACK_HOURS = tostring(var.lookback_hours)
+      PAGE_LIMIT     = tostring(var.page_limit)
+      MAX_PAGES      = tostring(var.max_pages)
+      SNS_TOPIC_ARN  = aws_sns_topic.ingest_notifications.arn
     }
   }
 }

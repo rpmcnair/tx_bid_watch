@@ -3,9 +3,10 @@ resource "aws_sns_topic" "ingest_notifications" {
 }
 
 resource "aws_sns_topic_subscription" "email" {
+  count     = var.notification_email == "" ? 0 : 1
   topic_arn = aws_sns_topic.ingest_notifications.arn
   protocol  = "email"
-  endpoint  = "rileymcnair3@gmail.com"
+  endpoint  = var.notification_email
 }
 
 resource "aws_iam_policy" "lambda_sns_publish" {
