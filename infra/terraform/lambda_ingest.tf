@@ -76,6 +76,7 @@ resource "aws_lambda_function" "ingest" {
       PAGE_LIMIT     = tostring(var.page_limit)
       MAX_PAGES      = tostring(var.max_pages)
       SNS_TOPIC_ARN  = aws_sns_topic.ingest_notifications.arn
+      CURATE_LAMBDA_NAME = aws_lambda_function.curate.function_name
     }
   }
 }
