@@ -32,7 +32,7 @@ Each run:
 - services/ingest/src/watch.py
 
 3. Raw Data Lake (S3)
-Raw data is stored as NDJSON (one record per line) to make queryable in Athena using Hive-style partitions:
+- Raw data is stored as NDJSON (one record per line) to make queryable in Athena using Hive-style partitions:
 ```bash
 raw/
   dataset=qh8x-rm8r/
@@ -64,32 +64,22 @@ raw/
 - Transformation includes: Type casting (string → numeric), Timestamp parsing, Selection of relevant columns
 
 8. Incremental Curation (Lambda → Athena)
-A second Lambda (tx-bid-watch-curate) performs:
-- Pre-check: does this run already exist?
+- A second Lambda (tx-bid-watch-curate) performs pre-check: does this run already exist?
 - If not: Executes INSERT INTO ... SELECT from raw → curated
 - If yes: Skips (duplicate-safe)
 - services/ingest/src/curate_handler.py
 
 9. End-to-End Orchestration
-The pipeline is fully connected:
-- Ingest Lambda -> writes raw -> invokes Curate Lambda -> updates curated layer
+- The pipeline is fully connected: Ingest Lambda -> writes raw -> invokes Curate Lambda -> updates curated layer
 - Triggered automatically after each ingest
 - Asynchronous Lambda-to-Lambda invocation
 
 10. Notifications (SNS)
-After each run, you receive an email with:
-- Dataset ID
-- Run timestamp
-- Rows ingested
-- S3 output location
+- After each run, you receive an email with: Dataset ID, Run timestamp, Rows ingested, S3 output location
 
 11. Observability (CloudWatch)
-Alarms configured for:
-- Lambda errors
-- High execution duration
-Logs available for:
-- Debugging runs
-- Inspecting outputs
+- Alarms configured for: Lambda errors, High execution duration
+- Logs available for: Debugging runs, Inspecting outputs
 
 ## Tech Stack
 - Python 3.12
